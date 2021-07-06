@@ -12,6 +12,8 @@
 #include "html.h"
 #include "mpu.h"
 
+#include "mpr121.h"
+
 // Replace with your network credentials (STATION)
 const char* ssid = "kit-bakery Lab";
 const char* password = "sewoon203";
@@ -23,7 +25,19 @@ AsyncEventSource events("/events");
 
 // Timer variables
 unsigned long lastTime = 0;
-unsigned long gyroDelay = 20;
+unsigned long gyroDelay = 30;
+
+unsigned long lastTimeLight = 0;
+unsigned long lightDelay = 30;
+
+unsigned long lastTimeTouch = 0;
+unsigned long touchDelay = 30;
+
+
+const int lightPin = 39;
+const int soundPin = 34;
+int lightSensorValue = 0;        // value read from the pot
+int soundSensorValue = 0;        // value read from the pot
 
 
 void initWiFi() {
@@ -47,26 +61,22 @@ void initWiFi() {
   Serial.println(WiFi.localIP());  
 }
 
-void getGyroReadings(){
+void getReadings(){
   mpu1.dmpGetQuaternion(&mpuVal1.q, mpuVal1.fifoBuffer);
+  mpu1.dmpGetAccel(&mpuVal1.aa, mpuVal1.fifoBuffer);
   mpu1.dmpGetGravity(&mpuVal1.gravity, &mpuVal1.q);
   mpu1.dmpGetYawPitchRoll(mpuVal1.ypr, &mpuVal1.q, &mpuVal1.gravity);
+  mpu1.dmpGetLinearAccel(&mpuVal1.aaReal, &mpuVal1.aa, &mpuVal1.gravity);
 
   mpu2.dmpGetQuaternion(&mpuVal2.q, mpuVal2.fifoBuffer);
   mpu2.dmpGetGravity(&mpuVal2.gravity, &mpuVal2.q);
+  mpu2.dmpGetGravity(&mpuVal2.gravity, &mpuVal2.q);
   mpu2.dmpGetYawPitchRoll(mpuVal2.ypr, &mpuVal2.q, &mpuVal2.gravity);
-}
-
-void getAccReadings(){
-  
-}
-
-void getTemperature(){
-  
+  mpu2.dmpGetLinearAccel(&mpuVal2.aaReal, &mpuVal2.aa, &mpuVal2.gravity);
 }
 
 String processor(const String& var){
-  getGyroReadings();
+  getReadings();
   //Serial.println(var);
   if(var == "GZ1"){
     return String(mpuVal1.ypr[0]);
@@ -98,7 +108,6 @@ void initWebSocket(){
     request->send_P(200, "text/html", index_html, processor);
   });
 
-
   // Handle Web Server Events
   events.onConnect([](AsyncEventSourceClient *client){
     if(client->lastId()){
@@ -121,43 +130,87 @@ void setup() {
   Serial.print("RRSI: "); Serial.println(WiFi.RSSI());
 
   initWebSocket();
-  
+  initTouch();
 }
 
 void loop() {
-
   if ((millis() - lastTime) > gyroDelay) {
+//    
+    
     if (mpu1.dmpGetCurrentFIFOPacket(mpuVal1.fifoBuffer) ) {
-      getGyroReadings();
+      getReadings();
       
       // Send Events to the Web Server with the Sensor Readings
       events.send(String(mpuVal1.ypr[0]* 180/M_PI).c_str(), "GZ1", millis());
       events.send(String(mpuVal1.ypr[1]* 180/M_PI).c_str(), "GX1", millis());
       events.send(String(mpuVal1.ypr[2]* 180/M_PI).c_str(), "GY1", millis());
+
+      events.send(String(mpuVal1.aaReal.x).c_str(), "AZ1", millis());
+      events.send(String(mpuVal1.aaReal.y).c_str(), "AX1", millis());
+      events.send(String(mpuVal1.aaReal.z).c_str(), "AY1", millis());
+      
       lastTime = millis();
+      #ifdef DEBUG
+      Serial.print("move1\t");
       Serial.print("ypr\t");
       Serial.print(mpuVal1.ypr[0] * 180/M_PI);
       Serial.print("\t");
       Serial.print(mpuVal1.ypr[1] * 180/M_PI);
       Serial.print("\t");
       Serial.println(mpuVal1.ypr[2] * 180/M_PI);
-    }
-    if (mpu2.dmpGetCurrentFIFOPacket(mpuVal2.fifoBuffer)) {
-      getGyroReadings();
+      #endif
       
-      // Send Events to the Web Server with the Sensor Readings
-      events.send(String(mpuVal2.ypr[0]* 180/M_PI).c_str(), "GZ2", millis());
-      events.send(String(mpuVal2.ypr[1]* 180/M_PI).c_str(), "GX2", millis());
-      events.send(String(mpuVal2.ypr[2]* 180/M_PI).c_str(), "GY2", millis());
-      lastTime = millis();
-      Serial.print("ypr\t");
-      Serial.print(mpuVal2.ypr[0] * 180/M_PI);
-      Serial.print("\t");
-      Serial.print(mpuVal2.ypr[1] * 180/M_PI);
-      Serial.print("\t");
-      Serial.println(mpuVal2.ypr[2] * 180/M_PI);
     }
+//    if (mpu2.dmpGetCurrentFIFOPacket(mpuVal2.fifoBuffer)) {
+//      getReadings();
+//      
+//      // Send Events to the Web Server with the Sensor Readings
+//      events.send(String(mpuVal2.ypr[0]* 180/M_PI).c_str(), "GZ2", millis());
+//      events.send(String(mpuVal2.ypr[1]* 180/M_PI).c_str(), "GX2", millis());
+//      events.send(String(mpuVal2.ypr[2]* 180/M_PI).c_str(), "GY2", millis());
+//
+//      events.send(String(mpuVal2.aaReal.x).c_str(), "AZ2", millis());
+//      events.send(String(mpuVal2.aaReal.y).c_str(), "AX2", millis());
+//      events.send(String(mpuVal2.aaReal.z).c_str(), "AY2", millis());
+//      lastTime = millis();
+//    #ifdef DEBUG
+//      Serial.print("move2\t");
+//      Serial.print("ypr\t");
+//      Serial.print(mpuVal2.ypr[0] * 180/M_PI);
+//      Serial.print("\t");
+//      Serial.print(mpuVal2.ypr[1] * 180/M_PI);
+//      Serial.print("\t");
+//      Serial.println(mpuVal2.ypr[2] * 180/M_PI);
+//      #endif
+//    }
+    
   }
+  
+    if((millis() - lastTimeLight) > lightDelay){
+      lightSensorValue = analogRead(lightPin);        // value read from the pot
+      soundSensorValue = analogRead(soundPin);
+      events.send(String(lightSensorValue).c_str(), "light", millis());
+      events.send(String(soundSensorValue).c_str(), "sound", millis());
+      #ifdef DEBUG
+      Serial.print("light\t");
+      Serial.print(lightSensorValue);
+      Serial.print("\t");
+      Serial.print("sound\t");
+      Serial.println(soundSensorValue);
+      #endif
+      lastTimeLight = millis();
+    }
+
+    if((millis() - lastTimeTouch) > touchDelay){
+      touching();
+      events.send(String(touchValue1).c_str(), "touch1", millis());
+      events.send(String(touchValue2).c_str(), "touch2", millis());
+      #ifdef DEBUG
+
+      #endif
+      lastTimeTouch = millis();
+    }
+    
 
 //  if ((millis() - lastTimeAcc) > accelerometerDelay) {
 //    // Send Events to the Web Server with the Sensor Readings

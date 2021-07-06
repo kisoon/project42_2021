@@ -118,7 +118,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   </div>
 
   <div class="content">
-    <h3>빛 센서</h3>
+    <h3>light Sensor</h3>
     <div class="cards">
       <div class="card">
         <p><span class="reading"><span id="light">%light%</p>
@@ -127,7 +127,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   </div>
 
   <div class="content">
-    <h3>소리 센서</h3>
+    <h3>sound Sensor</h3>
     <div class="cards">
       <div class="card">
         <p><span class="reading"><span id="sound">%sound%</p>
@@ -136,7 +136,7 @@ const char index_html[] PROGMEM = R"rawliteral(
   </div>
 
   <div class="content">
-    <h3>터치 센서</h3>
+    <h3>touch Sensor</h3>
     <div class="cards">
       <div class="button">
         <p><span class="reading"><span id="touch1">%touch1%</p>
@@ -191,14 +191,11 @@ if (!!window.EventSource) {
  }, false);
 
  source.addEventListener('error', function(e) {
-
   if (e.target.readyState != EventSource.OPEN) {
     console.log("Events Disconnected");
   }
-
  }, false);
 
- 
 
  source.addEventListener('message', function(e) {
   console.log("message", e.data);
@@ -275,7 +272,29 @@ if (!!window.EventSource) {
   document.getElementById("AZ2").innerHTML = e.data;
  }, false);
 
+ 
+//mic sensor
+ source.addEventListener('sound', function(e) {
+  console.log("sound", e.data);
+  document.getElementById("sound").innerHTML = e.data;
+ }, false);
 
+//light sensor
+  source.addEventListener('light', function(e) {
+  console.log("light", e.data);
+  document.getElementById("light").innerHTML = e.data;
+ }, false);
+
+ 
+//touch sensor
+  source.addEventListener('touch1', function(e) {
+  console.log("touch1", e.data);
+  document.getElementById("touch1").innerHTML = e.data;
+ }, false);
+  source.addEventListener('touch2', function(e) {
+  console.log("touch2", e.data);
+  document.getElementById("touch2").innerHTML = e.data;
+ }, false);
 
 }
 
