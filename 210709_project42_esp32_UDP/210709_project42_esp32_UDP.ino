@@ -11,7 +11,7 @@
 
 #include "SPIFFS.h"
 
-#define DEBUG
+//#define DEBUG
 //#define SPIFFSS
 
 AsyncUDP Udp;
@@ -19,11 +19,11 @@ const unsigned int udpPort = 9999;
 
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
-const char* ssid = "kit-bakery Lab";
-const char* password = "sewoon203";
+const char* ssid = "KT_GiGA_2G_Wave2_7227";
+const char* password = "4eej09ke00";
 
-IPAddress local_IP(192, 168, 1, 183);
-IPAddress gateway(192, 168, 1, 1);
+IPAddress local_IP(172, 30, 1, 60);
+IPAddress gateway(172, 30, 1, 254);
 IPAddress subnet(255, 255, 255, 0);
 //////////////////////////////////////
 
@@ -203,8 +203,8 @@ void loop() {
   if ((millis() - lastTime) > timerDelay) {
     getSensorReadings();
     // Send Events to the Web Server with the Sensor Readings
-    dataBuffer[6] = lightSensorVal;
-    dataBuffer[7] = soundSensorVal;
+    dataBuffer[6] = lightSensorVal*0.5;
+    dataBuffer[7] = soundSensorVal*0.5;
 //
 //    events.send(String(soundSensorVal).c_str(),"sound",millis());
 //    events.send(String(lightSensorVal).c_str(),"light",millis());
@@ -220,12 +220,12 @@ void loop() {
     touchLastTime = millis();
   }
 
-  char udpBuffer[50];
+  char udpBuffer[60];
 
   String udpString = String(String(dataBuffer[0]) + "," + String(dataBuffer[1]) + "," + String(dataBuffer[2]) + "," +
                             String(dataBuffer[3])+","+String(dataBuffer[4])+","+String(dataBuffer[5])+","+
                             String(dataBuffer[6])+","+String(dataBuffer[7])+","+String(dataBuffer[8])+","+String(dataBuffer[9]));
-  udpString.toCharArray(udpBuffer, 30);
+  udpString.toCharArray(udpBuffer, 60);
 
   Udp.broadcastTo(udpBuffer, udpPort);
 
