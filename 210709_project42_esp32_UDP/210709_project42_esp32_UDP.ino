@@ -11,19 +11,28 @@
 
 #include "SPIFFS.h"
 
-//#define DEBUG
+#define DEBUG
 //#define SPIFFSS
+//////////////////////////////////////
+//자신이 연결한 센서 주석 해제 주석은(// 표시)
+#define MOVE1
+//#define MOVE2
+//#define SOUND
+//#define LIGHT
+//#define TOUCH
+//////////////////////////////////////
 
 AsyncUDP Udp;
 const unsigned int udpPort = 9999;
 
+//////////////////////////////////////
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
-const char* ssid = "KT_GiGA_2G_Wave2_7227";
-const char* password = "4eej09ke00";
+const char* ssid = "project42";
+const char* password = "";
 
-IPAddress local_IP(172, 30, 1, 60);
-IPAddress gateway(172, 30, 1, 254);
+IPAddress local_IP(192, 168, 0, 60);
+IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
 //////////////////////////////////////
 
@@ -169,7 +178,13 @@ void setup() {
   
   initTouch();
   initLED();
+  #ifdef MOVE1
   initMPU();
+  #endif
+
+  #ifdef MOVE2
+  initMPU1();
+  #endif
 
 //  handleWebServer();
 
@@ -179,15 +194,29 @@ void setup() {
 void loop() {
   // put your main code here, to run repeatedly:
     if ((millis() - mpuLastTime) > mpuTimerDelay) {
-    mpuLoop();
+    
     // Send Events to the Web Server with the Sensor Readings
+    #ifdef MOVE1
+    mpuLoop();
     dataBuffer[0] = ypr[2] * 180/M_PI;
     dataBuffer[1] = ypr[1] * 180/M_PI;
     dataBuffer[2] = ypr[0] * 180/M_PI;
+    #else
+    dataBuffer[0] = 0;
+    dataBuffer[1] = 0;
+    dataBuffer[2] = 0;
+    #endif
 
+    #ifdef MOVE2
+    mpuLoop1();
     dataBuffer[3] = ypr1[2] * 180/M_PI;
     dataBuffer[4] = ypr1[1] * 180/M_PI;
     dataBuffer[5] = ypr1[0] * 180/M_PI;
+    #else
+    dataBuffer[3] = 0;
+    dataBuffer[4] = 0;
+    dataBuffer[5] = 0;
+    #endif
     
 //    events.send(String(ypr[2] * 180/M_PI).c_str(),"GX1",millis());
 //    events.send(String(ypr[1] * 180/M_PI).c_str(),"GY1",millis());
@@ -203,8 +232,17 @@ void loop() {
   if ((millis() - lastTime) > timerDelay) {
     getSensorReadings();
     // Send Events to the Web Server with the Sensor Readings
-    dataBuffer[6] = lightSensorVal*0.5;
-    dataBuffer[7] = soundSensorVal*0.5;
+    #ifdef LIGHT
+    dataBuffer[6] = lightSensorVal*0.1;
+    #else
+    dataBuffer[6] = 0;
+    #endif
+
+    #ifdef SOUND
+    dataBuffer[7] = soundSensorVal*0.1;
+    #else
+    dataBuffer[7] = 0;
+    #endif
 //
 //    events.send(String(soundSensorVal).c_str(),"sound",millis());
 //    events.send(String(lightSensorVal).c_str(),"light",millis());
@@ -212,9 +250,15 @@ void loop() {
   }
   
   if((millis() - touchLastTime) > touchTimerDelay){
+    
+    #ifdef TOUCH
     getTouching();
     dataBuffer[8] = touchValue1;
     dataBuffer[9] = touchValue2;
+    #else
+    dataBuffer[8] = 0;
+    dataBuffer[9] = 0;
+    #endif
 //    events.send(String(touchValue1).c_str(),"touch1",millis());
 //    events.send(String(touchValue2).c_str(),"touch2",millis());
     touchLastTime = millis();
@@ -231,8 +275,8 @@ void loop() {
 
 #ifdef DEBUG
   Serial.println(udpString);
-  #endif
-  delay(10);
+#endif
+  delay(20);
 //  ledShow();
 }
 

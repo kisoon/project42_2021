@@ -53,6 +53,60 @@ VectorFloat gravity1;    // [x, y, z]            gravity vector
 float euler1[3];         // [psi, theta, phi]    Euler angle container
 float ypr1[3];           // [yaw, pitch, roll]   yaw/pitch/roll container and gravity vector
 
+void initMPU1(){
+    // join I2C bus (I2Cdev library doesn't do this automatically)
+#if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
+//  Wire.begin(23, 22);
+  Wire.setClock(400000); // 400kHz I2C clock. Comment this line if having compilation difficulties
+#elif I2CDEV_IMPLEMENTATION == I2CDEV_BUILTIN_FASTWIRE
+  Fastwire::setup(400, true);
+#endif
+
+  // initialize device
+  Serial.println(F("Initializing I2C devices..."));
+  mpu1.initialize();
+//  pinMode(INTERRUPT_PIN, INPUT);
+
+  // verify connection
+  Serial.println(F("Testing device connections..."));
+  Serial.println(mpu1.testConnection() ? F("MPU6050-1 connection successful") : F("MPU6050-1 connection failed"));
+
+  // load and configure the DMP
+  Serial.println(F("Initializing DMP..."));
+  devStatus1 = mpu1.dmpInitialize();
+  
+  mpu1.setXGyroOffset(220);
+  mpu1.setYGyroOffset(76);
+  mpu1.setZGyroOffset(-85);
+  mpu1.setZAccelOffset(1788); // 1688 factory default for my test chip
+     // make sure it worked (returns 0 if so)
+  if (devStatus1 == 0) {
+    // turn on the DMP, now that it's ready
+    Serial.println(F("Enabling DMP..."));
+    mpu1.setDMPEnabled(true);
+
+    // enable Arduino interrupt detection
+//    Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
+//    attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
+    mpuIntStatus1 = mpu1.getIntStatus();
+
+    // set our DMP Ready flag so the main loop() function knows it's okay to use it
+    Serial.println(F("DMP ready! Waiting for first interrupt..."));
+    dmpReady1 = true;
+
+    // get expected DMP packet size for later comparison
+    packetSize1 = mpu1.dmpGetFIFOPacketSize();
+  } else {
+    // ERROR!
+    // 1 = initial memory load failed
+    // 2 = DMP configuration updates failed
+    // (if it's going to break, usually the code will be 1)
+    Serial.print(F("DMP Initialization failed (code "));
+    Serial.print(devStatus1);
+    Serial.println(F(")"));
+  }
+}
+
 void initMPU(){
     // join I2C bus (I2Cdev library doesn't do this automatically)
 #if I2CDEV_IMPLEMENTATION == I2CDEV_ARDUINO_WIRE
@@ -84,10 +138,7 @@ void initMPU(){
   mpu.setZGyroOffset(-85);
   mpu.setZAccelOffset(1788); // 1688 factory default for my test chip
 
-  mpu1.setXGyroOffset(220);
-  mpu1.setYGyroOffset(76);
-  mpu1.setZGyroOffset(-85);
-  mpu1.setZAccelOffset(1788); // 1688 factory default for my test chip
+
 
   // make sure it worked (returns 0 if so)
   if (devStatus == 0) {
@@ -116,37 +167,11 @@ void initMPU(){
     Serial.println(F(")"));
   }
 
-    // make sure it worked (returns 0 if so)
-  if (devStatus1 == 0) {
-    // turn on the DMP, now that it's ready
-    Serial.println(F("Enabling DMP..."));
-    mpu1.setDMPEnabled(true);
-
-    // enable Arduino interrupt detection
-//    Serial.println(F("Enabling interrupt detection (Arduino external interrupt 0)..."));
-//    attachInterrupt(digitalPinToInterrupt(INTERRUPT_PIN), dmpDataReady, RISING);
-    mpuIntStatus1 = mpu1.getIntStatus();
-
-    // set our DMP Ready flag so the main loop() function knows it's okay to use it
-    Serial.println(F("DMP ready! Waiting for first interrupt..."));
-    dmpReady1 = true;
-
-    // get expected DMP packet size for later comparison
-    packetSize1 = mpu1.dmpGetFIFOPacketSize();
-  } else {
-    // ERROR!
-    // 1 = initial memory load failed
-    // 2 = DMP configuration updates failed
-    // (if it's going to break, usually the code will be 1)
-    Serial.print(F("DMP Initialization failed (code "));
-    Serial.print(devStatus1);
-    Serial.println(F(")"));
-  }
+ 
 }
 
 void mpuLoop(){
   if (!dmpReady) return;
-  if (!dmpReady1) return;
     // read a packet from FIFO
     if (mpu.dmpGetCurrentFIFOPacket(fifoBuffer)) { // Get the Latest packet 
 
@@ -163,6 +188,12 @@ void mpuLoop(){
             Serial.println(ypr[2] * 180/M_PI);
         #endif
     }
+
+}
+
+void mpuLoop1(){
+
+  if (!dmpReady1) return;
     if (mpu1.dmpGetCurrentFIFOPacket(fifoBuffer1)) { // Get the Latest packet 
 
             // display Euler angles in degrees
