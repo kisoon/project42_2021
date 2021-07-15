@@ -15,16 +15,12 @@
 //#define SPIFFSS
 //////////////////////////////////////
 //자신이 연결한 센서 주석 해제 주석은(// 표시)
-#define MOVE1
+//#define MOVE1
 //#define MOVE2
 //#define SOUND
 //#define LIGHT
-//#define TOUCH
+#define TOUCH
 //////////////////////////////////////
-
-AsyncUDP Udp;
-const unsigned int udpPort = 9999;
-
 //////////////////////////////////////
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
@@ -35,6 +31,9 @@ IPAddress local_IP(192, 168, 0, 60);
 IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
 //////////////////////////////////////
+
+AsyncUDP Udp;
+const unsigned int udpPort = 9999;
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
