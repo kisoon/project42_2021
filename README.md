@@ -9,9 +9,9 @@
    https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
 5. 아두이노에서 보드 매니저를 실행하세요. 도구(Tools) 메뉴 -> Board -> 보드 매니저(Board Manager)
 <img src="https://user-images.githubusercontent.com/113105/127855026-4d74ebb8-c8ff-45d0-80fd-c78cd27e8f70.png" width="70%" height="70%"/>
-6. 보드 매니저를 실행 후 esp32 라고 검색을 해주세요.
+6. 보드 매니저를 실행 후 esp32 라고 검색을 해주세요. 설치(instll)버튼을 클릭하여 esp32 보드를 아두이노에 설치합니다.
 <img src="https://user-images.githubusercontent.com/113105/127855118-6b8e8cc2-e387-4179-bc3e-1d63285f7680.png" width="70%" height="70%"/>
-설치(instll)버튼을 클릭하여 esp32 보드를 아두이노에 설치합니다.
+
 
 7. 그리고 아두이노 IDE를 다시 실행시키세요.
 
