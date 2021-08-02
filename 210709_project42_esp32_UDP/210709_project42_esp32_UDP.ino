@@ -13,27 +13,45 @@
 
 #define DEBUG
 //#define SPIFFSS
+//#define WEB_SERVER
 //////////////////////////////////////
 //자신이 연결한 센서 주석 해제 주석은(// 표시)
 //#define MOVE1
 //#define MOVE2
-//#define SOUND
+#define SOUND
 //#define LIGHT
-#define TOUCH
+//#define TOUCH
+//#define LED
 //////////////////////////////////////
+
+
 //////////////////////////////////////
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
-const char* ssid = "project42";
-const char* password = "";
+const char* ssid = "kit-bakery Lab";
+const char* password = "sewoon203";
 
-IPAddress local_IP(192, 168, 0, 60);
-IPAddress gateway(192, 168, 0, 1);
+IPAddress local_IP(192, 168, 1, 61);
+IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
+
+//const char* ssid = "project42";
+//const char* password = "";
+//
+//IPAddress local_IP(192, 168, 0, 62);
+//IPAddress gateway(192, 168, 0, 1);
+//IPAddress subnet(255, 255, 255, 0);
+//
+AsyncUDP Udp;
+const unsigned int udpPort = 9200; //9000~9999
+//actor1  60, 9000 --> Light, Touch  / White
+//actor2  61, 9100 --> Touch,        /
+//actor3  62, 9200 --> Acc, Touch    /
+//actor4  63, 9300 --> Acc1, Touch   /
+//actor4  64, 9400 --> Acc2
 //////////////////////////////////////
 
-AsyncUDP Udp;
-const unsigned int udpPort = 9999;
+
 
 // Create AsyncWebServer object on port 80
 AsyncWebServer server(80);
@@ -174,9 +192,11 @@ void setup() {
 //  #ifdef SPIFFS
 //    initSPIFFS();
 //  #endif
-  
+
+  #ifdef TOUCH
   initTouch();
-  initLED();
+  #endif
+  
   #ifdef MOVE1
   initMPU();
   #endif
@@ -184,13 +204,21 @@ void setup() {
   #ifdef MOVE2
   initMPU1();
   #endif
+  
+  initLED();
 
-//  handleWebServer();
+  #ifdef WEB_SERVER
+  handleWebServer();
+  #endif
 
   delay(1000);
 }
 
 void loop() {
+#ifdef LED
+  ledShow();
+#endif
+
   // put your main code here, to run repeatedly:
     if ((millis() - mpuLastTime) > mpuTimerDelay) {
     
