@@ -11,5 +11,5 @@
 <img src="https://user-images.githubusercontent.com/113105/127855026-4d74ebb8-c8ff-45d0-80fd-c78cd27e8f70.png" width="70%" height="70%"/>
 6. 보드 매니저를 실행 후 esp32 라고 검색을 해주세요.
 <img src="https://user-images.githubusercontent.com/113105/127855118-6b8e8cc2-e387-4179-bc3e-1d63285f7680.png" width="70%" height="70%"/>
-
+7. 그리고 아두이노 IDE를 다시 실행시키세요.
 
