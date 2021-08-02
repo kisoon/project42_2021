@@ -15,3 +15,7 @@
 
 7. 그리고 아두이노 IDE를 다시 실행시키세요.
 
+8. 다시! 도구(Tools) 메뉴 -> Board에서 ESP32 -> ESP32 Dev Module을 선택합니다.
+9. ![image](https://user-images.githubusercontent.com/113105/127861314-c187119f-534d-4fc2-ac5b-ea1e0e0b61ad.png)
+   
+
