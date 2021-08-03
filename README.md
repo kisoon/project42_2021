@@ -16,12 +16,11 @@
 7. 그리고 아두이노 IDE를 다시 실행시키세요.
 
 8. 다시! 도구(Tools) 메뉴 -> Board에서 ESP32 Arduino -> ESP32 Dev Module을 선택합니다.
-  ![image](https://user-images.githubusercontent.com/113105/127861314-c187119f-534d-4fc2-ac5b-ea1e0e0b61ad.png)
+  <img src="https://user-images.githubusercontent.com/113105/127861314-c187119f-534d-4fc2-ac5b-ea1e0e0b61ad.png" width="70%" height="70%"/>
 9. 마지막으로 자신의 컴퓨터의 설치된 42보드 포트를 선택해야합니다. 포트를 선택하기전 컴퓨터에 드라이버 소프트웨어를 설치합니다.
    42보드에는 cp2104라는 USB포트 인식 칩이 내장되어 있습니다.
    다음 링크에서 자신의 컴퓨터 환경에 맞는 드라이버를 다운받아 설치합니다.
    https://www.silabs.com/developers/usb-to-uart-bridge-vcp-drivers
-   ![image](https://user-images.githubusercontent.com/113105/127861858-926ac5ec-065e-4b47-a7ee-fd49363417b9.png)
-
+   <img src="https://user-images.githubusercontent.com/113105/127861858-926ac5ec-065e-4b47-a7ee-fd49363417b9.png" width="70%" height="70%"/>
    
 
