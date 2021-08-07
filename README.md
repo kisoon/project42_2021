@@ -26,6 +26,8 @@
 10. 드라이버의 설치를 완료한 뒤 다시 아두이노 IDE로 돌아와 도구(Tools) 메뉴에서 port를 확인합니다. 자신의 컴퓨터에 설치된 42보드 포트를 확인할 수 있습니다.
     windows는 COM[숫자]의 형태로 되어있습니다.
    <img src="https://user-images.githubusercontent.com/113105/127997827-501c237e-1fb8-4bcc-82c4-a1d97c048bbb.png" width="70%" height="70%"/>
+   
+11. 42보드를 사용할 때는 항상 보드이름과 포트를 확인 후 사용합니다.
 
 
    
