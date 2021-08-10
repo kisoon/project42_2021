@@ -14,14 +14,16 @@ uint32_t blue = strip.Color(0, 0, 255);
 uint32_t magenta = strip.Color(255, 0, 255);
 uint32_t yellow = strip.Color(255, 255, 0);
 uint32_t white = strip.Color(255, 255, 255);
+uint32_t black = strip.Color(0, 0, 0);
 
-uint32_t ledColor = 0;
+uint32_t ledColor = red;
+int brightness = 20;
 
 void initLED() {
 
   strip.begin();           // INITIALIZE NeoPixel strip object (REQUIRED)
   strip.show();            // Turn OFF all pixels ASAP
-  strip.setBrightness(250); // Set BRIGHTNESS to about 1/5 (max = 255)
+  strip.setBrightness(brightness); // Set BRIGHTNESS to about 1/5 (max = 255)
 }
 
 void rainbow(int wait) {
@@ -48,9 +50,15 @@ void rainbow(int wait) {
 
 
 void ledShow() {
-  
   for(int i=0; i<strip.numPixels(); i++) {
     strip.setPixelColor(i, ledColor);
+  }
+  strip.show();
+}
+
+void ledOff() {
+  for(int i=0; i<strip.numPixels(); i++) {
+    strip.setPixelColor(i, black);
   }
   strip.show();
 }

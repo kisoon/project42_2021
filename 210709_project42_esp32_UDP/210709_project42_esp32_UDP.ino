@@ -12,25 +12,24 @@
 #include "SPIFFS.h"
 
 #define DEBUG
-//#define SPIFFSS
-//#define WEB_SERVER
+
 //////////////////////////////////////
-//자신이 연결한 센서 주석 해제 주석은(// 표시)
+//자신이 연결한 센서 주석 해제 (// 주석 표시)석
 //#define MOVE1
 //#define MOVE2
-#define SOUND
+//#define SOUND
 //#define LIGHT
 //#define TOUCH
 //#define LED
 //////////////////////////////////////
 
-
 //////////////////////////////////////
+//-------Wifi환경 설정하기---------
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
 const char* ssid = "kit-bakery Lab";
 const char* password = "sewoon203";
-
+//
 IPAddress local_IP(192, 168, 1, 61);
 IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
@@ -44,11 +43,13 @@ IPAddress subnet(255, 255, 255, 0);
 //
 AsyncUDP Udp;
 const unsigned int udpPort = 9200; //9000~9999
-//actor1  60, 9000 --> Light, Touch  / White
-//actor2  61, 9100 --> Touch,        /
-//actor3  62, 9200 --> Acc, Touch    /
-//actor4  63, 9300 --> Acc1, Touch   /
-//actor4  64, 9400 --> Acc2
+
+
+//actor1(현주쌤)  60, 9000 --> Acc,  Touch(4번 장면)    / Touch만 프로그램 재 업로드
+//actor2(수연쌤)  61, 9100 --> Touch        
+//actor3(문선쌤)  62, 9200 --> Acc1, Touch(4번 장면)    /arm
+//actor3(문선쌤)  63, 9300 --> Acc2/leg
+//actor4(난희쌤)  64, 9400 --> Light, Touch(4번 장면)   / White
 //////////////////////////////////////
 
 
@@ -79,12 +80,6 @@ int soundSensorVal = 0;
 int dataBuffer[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 
-void initSPIFFS() {
-  if (!SPIFFS.begin()) {
-    Serial.println("An error has occurred while mounting SPIFFS");
-  }
-  Serial.println("SPIFFS mounted successfully");
-}
 
 void initWiFi() {
   WiFi.mode(WIFI_STA);
@@ -133,55 +128,6 @@ void getSensorReadings(){
   soundSensorVal = analogReadMIC(soundSensorPin);
 }
 
-String processor(const String &var){
-  getSensorReadings();
-  getTouching();
-//  Serial.println(var);
-  if(var == "SOUND"){
-    return String(soundSensorVal);
-  }
-  else if(var == "LIGHT"){
-    return String(lightSensorVal);
-  }
-  else if(var == "TOUCH1"){
-    return String(touchValue1);
-  }
-   else if(var == "TOUCH2"){
-    return String(touchValue2);
-  }
-}
-
-void handleWebServer(){
-  // Handle Web Server
- 
-
-#ifdef SPIFFSS
-  server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-  request->send(SPIFFS, "/index.html", "text/html");
-  });
-
-  server.serveStatic("/", SPIFFS, "/");
-#else
-   server.on("/", HTTP_GET, [](AsyncWebServerRequest *request){
-    //Send large webpage from PROGMEM containing templates
-    request->send_P(200, "text/html", index_html, processor);
-  });
-#endif
-
-  // Handle Web Server Events
-  events.onConnect([](AsyncEventSourceClient *client){
-    if(client->lastId()){
-      Serial.printf("Client reconnected! Last message ID that it got is: %u\n", client->lastId());
-    }
-    // send event with message "hello!", id current millis
-    // and set reconnect delay to 1 second
-    client->send("hello!", NULL, millis(), 10000);
-  });
-  server.addHandler(&events);
-
-  // Start server
-  server.begin();
-}
 
 void setup() {
 
@@ -189,9 +135,7 @@ void setup() {
   // put your setup code here, to run once:
   Serial.begin(115200);
   initWiFi();
-//  #ifdef SPIFFS
-//    initSPIFFS();
-//  #endif
+
 
   #ifdef TOUCH
   initTouch();
@@ -212,6 +156,10 @@ void setup() {
   #endif
 
   delay(1000);
+
+  //test LED
+  pinMode(13, OUTPUT);
+  digitalWrite(13, LOW);
 }
 
 void loop() {
@@ -245,14 +193,6 @@ void loop() {
     dataBuffer[5] = 0;
     #endif
     
-//    events.send(String(ypr[2] * 180/M_PI).c_str(),"GX1",millis());
-//    events.send(String(ypr[1] * 180/M_PI).c_str(),"GY1",millis());
-//    events.send(String(ypr[0] * 180/M_PI).c_str(),"GZ1",millis());
-//    
-//    events.send(String(ypr[5] * 180/M_PI).c_str(),"GX2",millis());
-//    events.send(String(ypr[4] * 180/M_PI).c_str(),"GY2",millis());
-//    events.send(String(ypr[3] * 180/M_PI).c_str(),"GZ2",millis());
-    
     mpuLastTime = millis();
   }
   
@@ -270,9 +210,7 @@ void loop() {
     #else
     dataBuffer[7] = 0;
     #endif
-//
-//    events.send(String(soundSensorVal).c_str(),"sound",millis());
-//    events.send(String(lightSensorVal).c_str(),"light",millis());
+
     lastTime = millis();
   }
   
@@ -282,12 +220,13 @@ void loop() {
     getTouching();
     dataBuffer[8] = touchValue1;
     dataBuffer[9] = touchValue2;
+    if(touchValue1 || touchValue2) digitalWrite(13, HIGH); else digitalWrite(13, LOW);
+    
     #else
     dataBuffer[8] = 0;
     dataBuffer[9] = 0;
     #endif
-//    events.send(String(touchValue1).c_str(),"touch1",millis());
-//    events.send(String(touchValue2).c_str(),"touch2",millis());
+
     touchLastTime = millis();
   }
 
@@ -303,8 +242,7 @@ void loop() {
 #ifdef DEBUG
   Serial.println(udpString);
 #endif
-  delay(20);
-//  ledShow();
+  delay(15);
 }
 
 int analogReadMIC(int analogPin){
