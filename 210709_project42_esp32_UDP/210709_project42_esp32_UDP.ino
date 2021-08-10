@@ -4,12 +4,10 @@
 #include <AsyncUDP.h>
 #include <ESPAsyncWebServer.h>
 
-#include "IndexHTML.h"
 #include "MPR121.h"
 #include "NeoPixelLED.h"
 #include "MPU6050.h"
 
-#include "SPIFFS.h"
 
 #define DEBUG
 
@@ -151,9 +149,7 @@ void setup() {
   
   initLED();
 
-  #ifdef WEB_SERVER
-  handleWebServer();
-  #endif
+
 
   delay(1000);
 
