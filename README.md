@@ -34,11 +34,16 @@
 10. 42보드를 사용할 때는 항상 보드이름과 포트를 확인 후 사용합니다.
 
 <H3> 라이브러리 설치 방법 </h3>
-1. 라이브러리는 아두이노 IDE를 실행하여 설치할 수 있다.
+아두이노 라이브러리 설치 가이드 -> https://www.arduino.cc/en/Guide/Libraries
+
+1. 라이브러리는 아두이노 IDE를 실행하여 설치할 수 있다.<br>
 2. 스케치 메뉴 -> 라이브러리 포함하기(include library) -> Manage libraries를 선택한다.<br>
 <img src="https://user-images.githubusercontent.com/113105/128958299-70d4bed9-c8ab-4560-a0aa-132b5c980eb3.png" width="70%" height="70%"/>
 <img src="https://user-images.githubusercontent.com/113105/128958462-d859e7a3-5550-4666-8845-fbe24e97e6e1.png" width="70%" height="70%"/>
 
 3. 검색창에 다음 라이브러리를 검색한 후 모두 설치를 한다.
-4. 
+   1) Adafruit_MPR121
+   2) MPU6050 by electronic cats https://github.com/electroniccats/mpu6050
+   3) Adafruit neopixel https://github.com/adafruit/Adafruit_NeoPixel
+   4) 
 
