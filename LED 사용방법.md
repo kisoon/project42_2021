@@ -9,8 +9,8 @@
 5. 다음 코드를 찾아봅니다.
    <pre>
    <code>
-uint32_t ledColor = red;
-int brightness = 20;
+      uint32_t ledColor = red;<br>
+      int brightness = 20;<br>
 </code></pre>
 
 6. uint32_t ledColor = red; 
