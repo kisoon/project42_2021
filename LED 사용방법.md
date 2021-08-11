@@ -7,7 +7,7 @@
 4. 그리고, neopixel 탭을 선택합니다.
  ![image](https://user-images.githubusercontent.com/113105/128957649-d800a060-b313-48c0-8705-f28fd0681bdf.png)
 5. 다음 코드를 찾아봅니다.
-   <pre><code>
+   <pre><code>{
 uint32_t ledColor = red;
 int brightness = 20;
-</code></pre>
+}</code></pre>
