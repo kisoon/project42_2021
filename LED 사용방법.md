@@ -12,5 +12,7 @@ uint32_t ledColor = red;
 int brightness = 20;
 </code></pre>
 
-6. uint32_t ledColor = red; 이 코드에서 red 대신 red, green, blue, magenta, yellow, white, black중 원하는 색상으로 변경합니다.
-7. int brightness = 20; 이코드는 LED의 밝기를 조절할 수 있습니다. 0~255까지의 숫자를 넣어보세요.
+6. uint32_t ledColor = red; 
+ 코드에서 red 대신 red, green, blue, magenta, yellow, white, black중 원하는 색상으로 변경합니다.
+7. int brightness = 20; 
+ 코드는 LED의 밝기를 조절할 수 있습니다. 0~255까지의 숫자를 넣어보세요.
