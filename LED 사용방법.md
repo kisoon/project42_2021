@@ -1,0 +1,8 @@
+<H1> LED 제어하기</h1>
+
+1. 42보드의 LED는 WS2812b라는 데이터 통신으로 색상을 변경할 수 있는 LED를 사용합니다.
+2. 이 LED를 사용하기위해 Adafruit의 neopixel 라이브러리를 사용합니다.
+   네오픽셀 라이브러리 : https://github.com/adafruit/Adafruit_NeoPixel
+3. 아두이노IDE로 예제코드를 열어봅시다.
+4. 그리고, neopixel 탭을 선택합니다.
+ ![image](https://user-images.githubusercontent.com/113105/128957649-d800a060-b313-48c0-8705-f28fd0681bdf.png)
