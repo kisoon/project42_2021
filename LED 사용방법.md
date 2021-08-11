@@ -7,7 +7,10 @@
 4. 그리고, neopixel 탭을 선택합니다.
  ![image](https://user-images.githubusercontent.com/113105/128957649-d800a060-b313-48c0-8705-f28fd0681bdf.png)
 5. 다음 코드를 찾아봅니다.
-   <pre><code>{
+   <pre><code>
 uint32_t ledColor = red;
 int brightness = 20;
-}</code></pre>
+</code></pre>
+
+6. uint32_t ledColor = red; 이 코드에서 red 대신 red, green, blue, magenta, yellow, white, black중 원하는 색상으로 변경합니다.
+7. int brightness = 20; 이코드는 LED의 밝기를 조절할 수 있습니다. 0~255까지의 숫자를 넣어보세요.
