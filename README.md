@@ -1,8 +1,8 @@
 # project42_2021
 42보드 지원 문서에 오신 것을 환영합니다! 여기에서 사용 방법에 대한 정보를 찾을 수 있습니다.
 
--- <a href = https://github.com/kisoon/project42_2021#-%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95-> 보드 설치방법 </a>
--- 라이브러리 설치 방법 
+-- <a href = https://github.com/kisoon/project42_2021#-%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95-> 보드 설치방법 </a><br>
+-- <a href = https://github.com/kisoon/project42_2021/blob/main/README.md#-%EB%9D%BC%EC%9D%B4%EB%B8%8C%EB%9F%AC%EB%A6%AC-%EC%84%A4%EC%B9%98-%EB%B0%A9%EB%B2%95->라이브러리 설치 방법 </a> 
 
 <H3> 보드 설치 방법 </h3>
 1. 아두이노 프로그램을 설치해주세요. https://www.arduino.cc/en/software 다음 링크에서 자신의 컴퓨터OS환경에 맞는 버전을 다운로드 받으면 됩니다.
