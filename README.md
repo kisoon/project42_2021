@@ -35,6 +35,6 @@
 
 <H3> 라이브러리 설치 방법 </h3>
 1. 라이브러리는 아두이노 IDE를 실행하여 설치할 수 있다.
-2. 스케치 메뉴 -> 라이브러리 포함하기(include library) -> Manage libraries를 선택한다.
+2. 스케치 메뉴 -> 라이브러리 포함하기(include library) -> Manage libraries를 선택한다.<br>
 ![image](https://user-images.githubusercontent.com/113105/128958299-70d4bed9-c8ab-4560-a0aa-132b5c980eb3.png)
 
