@@ -13,7 +13,7 @@
 
 //////////////////////////////////////
 //자신이 연결한 센서 주석 해제 (// 주석 표시)석
-//#define MOVE1
+#define MOVE1
 //#define MOVE2
 //#define SOUND
 //#define LIGHT
@@ -25,22 +25,22 @@
 //-------Wifi환경 설정하기---------
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
-const char* ssid = "kit-bakery Lab";
-const char* password = "sewoon203";
-//
-IPAddress local_IP(192, 168, 1, 61);
-IPAddress gateway(192, 168, 1, 1);
-IPAddress subnet(255, 255, 255, 0);
-
-//const char* ssid = "project42";
-//const char* password = "";
-//
-//IPAddress local_IP(192, 168, 0, 62);
-//IPAddress gateway(192, 168, 0, 1);
+//const char* ssid = "kit-bakery Lab";
+//const char* password = "sewoon203";
+////
+//IPAddress local_IP(192, 168, 1, 61);
+//IPAddress gateway(192, 168, 1, 1);
 //IPAddress subnet(255, 255, 255, 0);
+
+const char* ssid = "project42";
+const char* password = "";
+
+IPAddress local_IP(192, 168, 0, 67);
+IPAddress gateway(192, 168, 0, 1);
+IPAddress subnet(255, 255, 255, 0);
 //
 AsyncUDP Udp;
-const unsigned int udpPort = 9200; //9000~9999
+const unsigned int udpPort = 9700; //9000~9999
 
 
 //actor1(현주쌤)  60, 9000 --> Acc,  Touch(4번 장면)    / Touch만 프로그램 재 업로드
@@ -122,7 +122,7 @@ void initWiFi() {
 }
 
 void getSensorReadings(){
-  lightSensorVal = analogRead(lightSensorPin);
+  lightSensorVal = analogReadLight(lightSensorPin);
   soundSensorVal = analogReadMIC(soundSensorPin);
 }
 
@@ -239,6 +239,33 @@ void loop() {
   Serial.println(udpString);
 #endif
   delay(15);
+}
+
+int analogReadLight(int analogPin){
+  const int numReadings = 5;
+  static int total;
+  static int readIndex = 0;
+  static int readings[numReadings];
+  static int average;
+  // subtract the last reading:
+  total = total - readings[readIndex];
+  // read from the sensor:
+  readings[readIndex] = analogRead(analogPin);
+  // add the reading to the total:
+  total = total + readings[readIndex];
+  // advance to the next position in the array:
+  readIndex = readIndex + 1;
+
+  // if we're at the end of the array...
+  if (readIndex >= numReadings) {
+    // ...wrap around to the beginning:
+    readIndex = 0;
+  }
+
+    // calculate the average:
+  average = (total / numReadings);
+
+  return average;
 }
 
 int analogReadMIC(int analogPin){
