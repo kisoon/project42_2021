@@ -13,31 +13,31 @@
 
 //////////////////////////////////////
 //자신이 연결한 센서 주석 해제 (// 주석 표시)석
-#define MOVE1
+//#define MOVE1
 //#define MOVE2
 //#define SOUND
 //#define LIGHT
 //#define TOUCH
-//#define LED
+#define LED
 //////////////////////////////////////
 
 //////////////////////////////////////
 //-------Wifi환경 설정하기---------
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
-//const char* ssid = "kit-bakery Lab";
-//const char* password = "sewoon203";
-////
-//IPAddress local_IP(192, 168, 1, 61);
-//IPAddress gateway(192, 168, 1, 1);
-//IPAddress subnet(255, 255, 255, 0);
-
-const char* ssid = "project42";
-const char* password = "";
-
-IPAddress local_IP(192, 168, 0, 67);
-IPAddress gateway(192, 168, 0, 1);
+const char* ssid = "kit-bakery Lab";
+const char* password = "sewoon203";
+//
+IPAddress local_IP(192, 168, 1, 61);
+IPAddress gateway(192, 168, 1, 1);
 IPAddress subnet(255, 255, 255, 0);
+
+//const char* ssid = "project42";
+//const char* password = "";
+//
+//IPAddress local_IP(192, 168, 0, 67);
+//IPAddress gateway(192, 168, 0, 1);
+//IPAddress subnet(255, 255, 255, 0);
 //
 AsyncUDP Udp;
 const unsigned int udpPort = 9700; //9000~9999
@@ -77,6 +77,9 @@ int lightSensorVal = 0;
 int soundSensorVal = 0;
 int dataBuffer[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
+enum ledColorName{
+  red=1, green, blue, magenta, yellow, cyan, white, black
+} ledColor;
 
 
 void initWiFi() {
@@ -160,7 +163,10 @@ void setup() {
 
 void loop() {
 #ifdef LED
-  ledShow();
+ledColor = green;
+  ledShow(ledColor);
+//  ledBlink(ledColor, 500);
+//  ledRainbow(20);
 #endif
 
   // put your main code here, to run repeatedly:
