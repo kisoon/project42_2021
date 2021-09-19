@@ -11,7 +11,7 @@
    win:파일->환경설정(Ctrl+,) / mac:arduino->preference(Command+,)<br>
    <img src="https://user-images.githubusercontent.com/113105/127854647-e6a15c33-2e30-4120-828a-48a921f55858.png" width="70%" height="70%"/>
 3. 그리고 사진의 주황색 칸에 다음 링크를 복사하여 붙여넣고 확인버튼(OK)을 눌러주세요
-   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json
+   https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json<br>
 4. 아두이노에서 보드 매니저를 실행하세요. 도구(Tools) 메뉴 -> Board -> 보드 매니저(Board Manager)
 <img src="https://user-images.githubusercontent.com/113105/127855026-4d74ebb8-c8ff-45d0-80fd-c78cd27e8f70.png" width="70%" height="70%"/><br>
 5. 보드 매니저를 실행 후 esp32 라고 검색을 해주세요. 그리고, 1.0.6버전을 선택하고, 설치(instll)버튼을 클릭하여 esp32 보드를 아두이노에 설치합니다.
