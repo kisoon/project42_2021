@@ -46,7 +46,7 @@
    1) Adafruit_MPR121
    2) MPU6050 by electronic cats https://github.com/electroniccats/mpu6050
    3) Adafruit neopixel https://github.com/adafruit/Adafruit_NeoPixel
-4. 다운받은 폴더의 libraries안의 AsyncTCP 폴더와 ESPAsyncWebServer 폴더를 내문서 -> arduino -> libraries 폴더안에 붙여넣기 합니다.
+4. 다운받은 폴더의 libraries안의 AsyncTCP 폴더와 ESPAsyncWebServer 폴더를 문서 -> arduino -> libraries 폴더안에 붙여넣기 합니다.
 <img src="https://user-images.githubusercontent.com/113105/129850013-4061971a-e445-43a4-b35a-0c03fd5c2f99.png" width="70%" height="70%"/>
 
 
