@@ -7,6 +7,7 @@
 
 <H3> 보드 설치 방법 </h3>
 1. 아두이노 프로그램을 설치해주세요. https://www.arduino.cc/en/software 다음 링크에서 자신의 컴퓨터OS환경에 맞는 버전을 다운로드 받으면 됩니다.<br>
+
 2. 아두이노 프로그램을 실행시키고 환경설정 윈도우를 열어주세요.<br>
    win:파일->환경설정(Ctrl+,) / mac:arduino->preference(Command+,)<br>
    <img src="https://user-images.githubusercontent.com/113105/127854647-e6a15c33-2e30-4120-828a-48a921f55858.png" width="70%" height="70%"/>
