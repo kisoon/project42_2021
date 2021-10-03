@@ -9,7 +9,7 @@
 #include "MPU6050.h"
 
 
-#define DEBUG
+//#define DEBUG
 
 //////////////////////////////////////
 //자신이 연결할 센서 주석 해제 (// 주석 표시)석
@@ -25,19 +25,24 @@
 //-------Wifi환경 설정하기---------
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
+
+//넷기어 기준
 //const char* ssid = "kit-bakery Lab";
 //const char* password = "sewoon203";
-////
+//
 //IPAddress local_IP(192, 168, 1, 61);
 //IPAddress gateway(192, 168, 1, 1);
 //IPAddress subnet(255, 255, 255, 0);
 
+
+//아이피타임 기준
 const char* ssid = "project42";
 const char* password = "";
 
 IPAddress local_IP(192, 168, 0, 236);
 IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
+//
 
 AsyncUDP Udp;
 const unsigned int udpPort = 9900; //9000~99999
@@ -184,18 +189,19 @@ void setup() {
 void loop() {
 #ifdef LED
 //ledColor = green; //red, green, blue, magenta, yellow, cyan, white, black
-ledColor = yellow;
-ledFunc = blink;
+ledColor = magenta;
+ledFunc = rainbow; //show, blink, rainbow
+int blinkTime = 500; //1000이 1초(숫자가 작을수록 빨라짐)
 
 switch(ledFunc){
   case 1:
    ledShow(ledColor);
     break;
   case 2:
-    ledBlink(ledColor, 500);
-    break;
+    ledBlink(ledColor, blinkTime); //<-----------
+    break;짐
   case 3:
-    ledRainbow(20);
+    ledRainbow(20); //숫자가 작을수록 빨라
     break;
   default:
     break;
