@@ -29,6 +29,7 @@ void initLED() {
 }
 
 void ledShow(int color) {
+
   switch (color) {
     case 1:
       ledColorName = strip.Color(255, 0, 0);
@@ -108,24 +109,24 @@ void ledBlink(int color, int interval) {
 
     if (ledState == LOW) {
       ledState = HIGH;
-
     } else {
       ledState = LOW;
     }
+
+//    digitalWrite(13, ledState);
+
+    if (ledState) {
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, ledColorName);
+      }
+    } else {
+      for (int i = 0; i < strip.numPixels(); i++) {
+        strip.setPixelColor(i, strip.Color(0, 0, 0));
+      }
+    }
+    strip.show();
   }
 
-  if (ledState) {
-    for (int i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, ledColorName);
-    }
-  } else {
-    for (int i = 0; i < strip.numPixels(); i++) {
-      strip.setPixelColor(i, strip.Color(0, 0, 0));
-    }
-
-  }
-
-  strip.show();
 }
 
 void ledRainbow(int interval) {
@@ -150,5 +151,4 @@ void ledRainbow(int interval) {
     strip.setPixelColor(i, strip.gamma32(strip.ColorHSV(pixelHue)));
   }
   strip.show(); // Update strip with new contents
-
 }

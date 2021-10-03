@@ -12,9 +12,9 @@
 #define DEBUG
 
 //////////////////////////////////////
-//자신이 연결한 센서 주석 해제 (// 주석 표시)석
+//자신이 연결할 센서 주석 해제 (// 주석 표시)석
 //#define MOVE1
-//#define MOVE2
+#define MOVE2
 //#define SOUND
 //#define LIGHT
 //#define TOUCH
@@ -25,22 +25,22 @@
 //-------Wifi환경 설정하기---------
 //자신의 WIFI 환경으로 수정해야 함
 //공유기에 따라 게이트웨이, 아이피 주소를 변경해야함.
-const char* ssid = "kit-bakery Lab";
-const char* password = "sewoon203";
-//
-IPAddress local_IP(192, 168, 1, 61);
-IPAddress gateway(192, 168, 1, 1);
+//const char* ssid = "kit-bakery Lab";
+//const char* password = "sewoon203";
+////
+//IPAddress local_IP(192, 168, 1, 61);
+//IPAddress gateway(192, 168, 1, 1);
+//IPAddress subnet(255, 255, 255, 0);
+
+const char* ssid = "project42";
+const char* password = "";
+
+IPAddress local_IP(192, 168, 0, 236);
+IPAddress gateway(192, 168, 0, 1);
 IPAddress subnet(255, 255, 255, 0);
 
-//const char* ssid = "project42";
-//const char* password = "";
-//
-//IPAddress local_IP(192, 168, 0, 67);
-//IPAddress gateway(192, 168, 0, 1);
-//IPAddress subnet(255, 255, 255, 0);
-//
 AsyncUDP Udp;
-const unsigned int udpPort = 9700; //9000~9999
+const unsigned int udpPort = 9900; //9000~99999
 
 
 //actor1(현주쌤)  60, 9000 --> Acc,  Touch(4번 장면)    / Touch만 프로그램 재 업로드
@@ -79,15 +79,35 @@ int dataBuffer[10] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 enum ledColorName{
   red=1, green, blue, magenta, yellow, cyan, white, black
-} ledColor;
+}ledColor;
 
+enum ledFunction{
+  show=1, blink, rainbow
+}ledFunc;
 
 void initWiFi() {
   WiFi.mode(WIFI_STA);
 
-  if (!WiFi.config(local_IP, gateway, subnet)) {
-    Serial.println("STA Failed to configure");
-  }
+//  int n = WiFi.scanNetworks();
+//  while(n == 0){
+//    n = WiFi.scanNetworks();
+//    for (int i = 0; i < n; ++i) {
+//            // Print SSID and RSSI for each network found
+//            Serial.print(i + 1);
+//            Serial.print(": ");
+//            Serial.print(WiFi.SSID(i));
+//            Serial.print(" (");
+//            Serial.print(WiFi.RSSI(i));
+//            Serial.print(")");
+//            Serial.println((WiFi.encryptionType(i) == WIFI_AUTH_OPEN)?" ":"*");
+//            delay(10);
+//        }
+//     delay(5000);
+//  }
+
+//  if (!WiFi.config(local_IP, gateway, subnet)) {
+//    Serial.println("STA Failed to configure");
+//  }
 
   WiFi.begin(ssid, password);
   Serial.print("Connecting to WiFi ..");
@@ -149,11 +169,11 @@ void setup() {
   #ifdef MOVE2
   initMPU1();
   #endif
-  
+
+  #ifdef LED
   initLED();
-
-
-
+  #endif
+  
   delay(1000);
 
   //test LED
@@ -163,10 +183,23 @@ void setup() {
 
 void loop() {
 #ifdef LED
-ledColor = green;
-  ledShow(ledColor);
-//  ledBlink(ledColor, 500);
-//  ledRainbow(20);
+//ledColor = green; //red, green, blue, magenta, yellow, cyan, white, black
+ledColor = yellow;
+ledFunc = blink;
+
+switch(ledFunc){
+  case 1:
+   ledShow(ledColor);
+    break;
+  case 2:
+    ledBlink(ledColor, 500);
+    break;
+  case 3:
+    ledRainbow(20);
+    break;
+  default:
+    break;
+}
 #endif
 
   // put your main code here, to run repeatedly:
