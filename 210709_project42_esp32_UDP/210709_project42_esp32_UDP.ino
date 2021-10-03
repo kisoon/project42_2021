@@ -34,7 +34,6 @@
 //IPAddress gateway(192, 168, 1, 1);
 //IPAddress subnet(255, 255, 255, 0);
 
-
 //아이피타임 기준
 const char* ssid = "project42";
 const char* password = "";
