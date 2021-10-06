@@ -174,9 +174,9 @@ void setup() {
   initMPU1();
   #endif
 
-  #ifdef LED
+
   initLED();
-  #endif
+  
   
   delay(1000);
 
